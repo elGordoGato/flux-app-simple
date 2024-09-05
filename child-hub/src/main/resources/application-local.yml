@@ -1,0 +1,25 @@
+spring:
+  r2dbc:
+    url: r2dbc:h2:mem:///~/db/child
+    username: sa
+    password: password
+  datasource:
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+    tcp:
+      enabled: true
+      port: 9092
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        enable_lazy_load_no_trans: true
+        ddl_auto: update
+h2:
+  tcp:
+    enabled: true
+    port: 9092
