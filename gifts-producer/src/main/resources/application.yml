@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: gifts-producer
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/gifts
+      repositories:
+        type: auto
+
+logging:
+  level:
+    org:
+      springdoc: DEBUG
+    sql: trace
+
+
+
