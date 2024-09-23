@@ -1,4 +1,4 @@
 rootProject.name = 'flux-app'
-include('gifts-producer')
 include('child-hub')
+include('gifts-producer')
 

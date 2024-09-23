@@ -9,7 +9,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -34,7 +33,7 @@ public class GiftServiceImpl implements GiftService {
 
     @Override
     public Flux<Gift> getGifts(Long childId) {
-        return giftAsyncRepository.findAllByChildIdIs(childId);
+        return giftAsyncRepository.findAllByChildIdIs(childId).delaySubscription(Duration.ofMillis(100));
     }
 
     @Override
@@ -44,6 +43,11 @@ public class GiftServiceImpl implements GiftService {
 
     @Override
     public List<Gift> getGiftsSync(Long childId) {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return giftSyncRepository.findByChildId(childId);
     }
 

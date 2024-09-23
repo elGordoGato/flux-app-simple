@@ -13,6 +13,21 @@ spring:
                 enable_lazy_load_no_trans: true
                 ddl_auto: update
 
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+    endpoint:
+        health:
+            show-details: "always"
+    elastic:
+        metrics:
+            export:
+                enabled: true
+    metrics:
+        tags:
+            application: ${spring.application.name}
 logging:
     level:
         org:
@@ -22,5 +37,6 @@ logging:
                 data.r2dbc: DEBUG
         #        r2dbc: DEBUG
         #
-        #    io.r2dbc.postgresql.QUERY: DEBUG
+        io.r2dbc.postgresql.QUERY: DEBUG
         io.r2dbc.postgresql.PARAM: DEBUG
+data.init.enabled: true

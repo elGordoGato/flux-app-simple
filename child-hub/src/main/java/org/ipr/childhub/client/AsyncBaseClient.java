@@ -19,7 +19,7 @@ public class AsyncBaseClient {
                 request.retrieve() :
                 request.body(BodyInserters.fromPublisher(publisher, inputType))
                         .retrieve();
-        log.info("Sent async POST request to {}\nResponse class: {}", uri, response.getClass());
+        log.info("Sent async POST request to {}\nResponse class: {}", uri, response);
         return response;
     }
 
@@ -27,7 +27,7 @@ public class AsyncBaseClient {
         var response = asyncClient.get()
                 .uri(uri)
                 .retrieve();
-        log.info("Sent async GET request to {}\nReceived response class: {}", uri, response.getClass());
+        log.info("Sent async GET request to {}\nReceived response class: {}", uri, response);
         return response;
     }
 }

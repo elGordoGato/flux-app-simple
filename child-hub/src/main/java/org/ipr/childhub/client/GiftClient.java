@@ -29,13 +29,11 @@ public class GiftClient {
         this.syncBaseUrl = baseUrl + "/sync/gifts";
         this.asyncClient = new AsyncBaseClient(webClientBuilder, asyncBaseUrl);
         this.syncClient = new SyncBaseClient(new RestTemplate());
-
     }
 
-
     public Mono<Gift> createGiftAsync(Long childId) {
-        return asyncClient.post(asyncBaseUrl + "/" + childId, Mono.empty(), Long.class)
-                .bodyToMono(Gift.class);
+        return Mono.just(Objects.requireNonNull(asyncClient.post(asyncBaseUrl + "/" + childId, Mono.empty(), Long.class)
+                .bodyToMono(Gift.class).block()));
     }
 
     public Flux<Gift> getGiftsAsync(Long childId) {
