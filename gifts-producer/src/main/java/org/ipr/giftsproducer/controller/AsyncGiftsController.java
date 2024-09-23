@@ -41,7 +41,7 @@ public class AsyncGiftsController {
     public Flux<Gift> getGiftsAsync(@PathVariable Long childId) {
         Instant mow = Instant.now();
 
-        return giftService.getGifts(childId).doAfterTerminate(() -> log.info("Diration call for id: {} - {} ms",
+        return giftService.getGifts(childId).doAfterTerminate(() -> log.info("GET call for id: {} Duration - {} ms",
                 childId, Instant.now().toEpochMilli() - mow.toEpochMilli()));
     }
 }

@@ -1,8 +1,7 @@
-DROP TABLE if exists gifts;
+DROP TABLE if exists children;
 CREATE TABLE children (
                           id BIGSERIAL PRIMARY KEY,
                           name VARCHAR(255),
                           age INT,
-                          created_at TIMESTAMP,
-                          updated_at TIMESTAMP
+                          created_at TIMESTAMP
 );

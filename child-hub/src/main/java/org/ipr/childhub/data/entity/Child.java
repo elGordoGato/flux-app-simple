@@ -37,8 +37,4 @@ public class Child {
     @CreatedDate
     @Schema(hidden = true)
     private Instant createdAt;
-
-    @LastModifiedDate
-    @Schema(hidden = true)
-    private Instant updatedAt;
 }
