@@ -30,6 +30,9 @@ logging:
 
         io.r2dbc.postgresql.QUERY: INFO
         io.r2dbc.postgresql.PARAM: INFO
+        root: info
+    file:
+        name: logs/child-application.log
 data.init.enabled: true
 server:
   tomcat:
