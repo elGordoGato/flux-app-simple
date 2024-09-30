@@ -7,23 +7,17 @@ import org.ipr.giftsproducer.service.GiftService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.Instant;
 
 @Slf4j
 @RestController
-@RequestMapping("/async")
 @RequiredArgsConstructor
 public class AsyncGiftsController {
     private final GiftService giftService;
 
     @GetMapping("/gifts/health")
-    public Mono<String> healthcheck(){
+    public Mono<String> healthcheck() {
         return Mono.just("OK");
     }
 
@@ -32,16 +26,8 @@ public class AsyncGiftsController {
         return giftService.createGift(childId);
     }
 
-    @PostMapping(value = "/gifts")
-    public Flux<Gift> getGiftsAsync(@RequestBody Flux<Long> childIds) {
-        return giftService.getGifts(childIds);
-    }
-
-    @GetMapping(value = "/gifts/{childId}")
-    public Flux<Gift> getGiftsAsync(@PathVariable Long childId) {
-        Instant mow = Instant.now();
-
-        return giftService.getGifts(childId).doAfterTerminate(() -> log.info("GET call for id: {} Duration - {} ms",
-                childId, Instant.now().toEpochMilli() - mow.toEpochMilli()));
+    @PostMapping(value = "/gifts/sync/{childId}")
+    public Gift generateGiftSync(@PathVariable Long childId) {
+        return giftService.createGiftSync(childId);
     }
 }

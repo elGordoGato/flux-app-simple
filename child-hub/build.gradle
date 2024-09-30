@@ -23,25 +23,24 @@ repositories {
     mavenCentral()
 }
 
-def includeTomcat = project.hasProperty('spring.profiles.active') && project.property('spring.profiles.active').contains('tomcat')
+def includeTomcat = project.hasProperty('includeTomcat.child') && project.property('includeTomcat.child').toBoolean()
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    if (includeTomcat) {
+        implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+    }
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.6.0'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'io.micrometer:micrometer-registry-prometheus'
-    if (includeTomcat) {
-        implementation 'org.springframework.boot:spring-boot-starter-tomcat:3.3.3'
-    }
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     runtimeOnly 'org.postgresql:r2dbc-postgresql'
+    implementation 'io.r2dbc:r2dbc-h2:1.0.0.RELEASE'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    implementation 'io.r2dbc:r2dbc-h2:1.0.0.RELEASE'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {
