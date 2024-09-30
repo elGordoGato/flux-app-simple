@@ -3,8 +3,10 @@ package org.ipr.giftsproducer.service;
 import lombok.extern.slf4j.Slf4j;
 import org.ipr.giftsproducer.data.entity.Gift;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Slf4j
 public class GiftGenerator {
@@ -14,15 +16,19 @@ public class GiftGenerator {
     private static final List<String> toyAdjectives = GiftParts.getToyAdjectives();
 
 
-    public static Gift generate(Long childId){
+    public static Gift generate(Long childId) {
         log.info("Generating gift for {}", childId);
-        Gift gift = new Gift();
         String toyName = "%s %s".formatted(
                 toyAdjectives.get(rand.nextInt(toyAdjectives.size())),
                 toys.get(rand.nextInt(toys.size())));
-        gift.setTitle(toyName);
-        gift.setPrice(rand.nextInt(priceBound));
-        gift.setChildId(childId);
-        return gift;
+
+        return Gift.builder()
+                .id(UUID.randomUUID().toString())
+                .title(toyName)
+                .price(rand.nextInt(priceBound))
+                .childId(childId)
+                .createdAt(Instant.now())
+                .build();
+
     }
 }

@@ -19,6 +19,9 @@ public class LoggingFilter implements WebFilter {
 
     @Override
     public @NonNull Mono<Void> filter(@NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
+        if (exchange.getRequest().getURI().getHost().equals("host.docker.internal")) {
+            return chain.filter(exchange);
+        }
         long startTime = Instant.now().toEpochMilli();
         ServerHttpRequest httpRequest = exchange.getRequest();
         log.info("Incoming request: method={}, path={}, params={}",
@@ -27,9 +30,8 @@ public class LoggingFilter implements WebFilter {
                 httpRequest.getQueryParams());
         return chain.filter(exchange).doAfterTerminate(() -> {
             long duration = System.currentTimeMillis() - startTime;
-            log.info("Request completed: method={}, uri={}, duration={}ms",
-                    httpRequest.getMethod(),
-                    httpRequest.getURI(),
+            log.info("Request completed:\n {}, Duration={}ms",
+                    httpRequest.getURI().getQuery(),
                     duration);
         });
     }

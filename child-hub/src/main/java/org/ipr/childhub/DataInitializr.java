@@ -1,26 +1,30 @@
-package org.ipr.childhub.data;
+package org.ipr.childhub;
 
+import io.r2dbc.spi.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ipr.childhub.data.entity.Child;
 import org.ipr.childhub.data.repository.ChildRepository;
-import org.ipr.childhub.service.ChildService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
+import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.Random;
 
-@ConditionalOnProperty("${data.init.enabled}")
+@ConditionalOnProperty("data.init.enabled")
 @Component
 @Slf4j
 @RequiredArgsConstructor
 class DataInitializr implements CommandLineRunner {
+    private final Random random = new Random();
 
-    private final ChildService childService;
+    private final ChildRepository childRepository;
     private final List<String> names = List.of(
             "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Hank", "Ivy", "Jack",
             "Kara", "Liam", "Mona", "Nate", "Olivia", "Paul", "Quinn", "Rose", "Sam", "Tina",
@@ -33,14 +37,34 @@ class DataInitializr implements CommandLineRunner {
             "Carter", "Daisy", "Eli", "Faith", "Gabe", "Hannah", "Isaac", "Jade", "Kurt", "Lily"
     );
 
+    @Bean
+    ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
+
+        ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
+        initializer.setConnectionFactory(connectionFactory);
+        initializer.setDatabasePopulator(new ResourceDatabasePopulator(new ClassPathResource("schema.sql")));
+
+        return initializer;
+    }
+
+
     @Override
     public void run(String[] args) {
-        log.info("start data initialization  ...");
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            childService.giveGiftsAndSave(new Child(null, names.get(random.nextInt(names.size())), (byte) random.nextInt(18), null), true).subscribe();
-        }
-        log.info("complete data initialization");
+        Flux.range(1, 100)
+                .doFirst(() -> log.info("start data initialization  ..."))
+                .doAfterTerminate(() -> log.info("complete data initialization"))
+                .map(i -> getRandomChild())
+                .flatMap(childRepository::save)
+                .subscribe();
+    }
+
+    private Child getRandomChild() {
+        return Child.builder()
+                .id(null)
+                .name(names.get(random.nextInt(names.size())))
+                .age((byte) random.nextInt(18))
+                .createdAt(null)
+                .build();
     }
 
 }

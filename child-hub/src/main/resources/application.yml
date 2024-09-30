@@ -1,18 +1,10 @@
 spring:
     application:
-        name: gifts-producer
+        name: child-hub
     r2dbc:
         url: ${DATASOURCE_URL:r2dbc:postgresql://localhost:5432/child}
         username: ${DATASOURCE_USER:admin}
         password: ${DATASOURCE_PASSWORD:admin}
-    jpa:
-        show-sql: true
-        properties:
-            hibernate:
-                format_sql: true
-                enable_lazy_load_no_trans: true
-                ddl_auto: update
-
 management:
     endpoints:
         web:
@@ -34,9 +26,11 @@ logging:
             springframework:
                 transaction: WARN
                 transaction.interceptor: WARN
-                data.r2dbc: DEBUG
-        #        r2dbc: DEBUG
-        #
-        io.r2dbc.postgresql.QUERY: DEBUG
-        io.r2dbc.postgresql.PARAM: DEBUG
+                data.r2dbc: INFO
+
+        io.r2dbc.postgresql.QUERY: INFO
+        io.r2dbc.postgresql.PARAM: INFO
 data.init.enabled: true
+server:
+  tomcat:
+    enabled: false

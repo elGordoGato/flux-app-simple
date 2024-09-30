@@ -1,15 +1,10 @@
 package org.ipr.childhub.service;
 
-import org.ipr.childhub.data.entity.Child;
-import org.ipr.childhub.model.ChildWithGifts;
-import org.springframework.data.domain.Sort;
-import reactor.core.publisher.Flux;
+import org.ipr.childhub.model.ChildWithGift;
 import reactor.core.publisher.Mono;
 
 public interface ChildService {
-    Mono<ChildWithGifts> giveGiftsAndSave(Child child, boolean isAsync);
+    Mono<ChildWithGift> getByIdSync(Long id);
 
-    Mono<ChildWithGifts> getById(Long id, boolean isAsync);
-
-    Flux<ChildWithGifts> getAll(int limit, Sort.Direction direction, boolean isAsync);
+    Mono<ChildWithGift> getByIdAsync(Long id, boolean isAsync);
 }
