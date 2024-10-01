@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class AsyncGiftsController {
+public class GiftsController {
     private final GiftService giftService;
 
     @GetMapping("/gifts/health")

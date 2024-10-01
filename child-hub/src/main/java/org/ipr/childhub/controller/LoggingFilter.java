@@ -25,8 +25,6 @@ public class LoggingFilter implements WebFilter {
         }
         long startTime = Instant.now().toEpochMilli();
         ServerHttpRequest httpRequest = exchange.getRequest();
-        String requestId = UUID.randomUUID().toString();
-        MDC.put(REQUEST_ID, requestId);
         log.info("Incoming request: method={}, path={}, params={}",
                 httpRequest.getMethod(),
                 httpRequest.getURI().getPath(),
@@ -34,7 +32,7 @@ public class LoggingFilter implements WebFilter {
         return chain.filter(exchange).doAfterTerminate(() -> {
             long duration = System.currentTimeMillis() - startTime;
             log.info("Request completed:\n {}, Duration={}ms",
-                    httpRequest.getURI().getQuery(),
+                    httpRequest.getURI(),
                     duration);
         });
     }
