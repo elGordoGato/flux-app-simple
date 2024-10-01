@@ -34,6 +34,3 @@ logging:
     file:
         name: logs/child-application.log
 data.init.enabled: true
-server:
-  tomcat:
-    enabled: false
