@@ -78,7 +78,6 @@ networks:
     driver: bridge
 
 volumes:
-  elasticsearch:
   grafana-storage:
 
 
