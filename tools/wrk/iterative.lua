@@ -1,6 +1,6 @@
 counter = 1
-isAsync = false
-isBlocking = true
+isAsync = true
+isBlocking = false
 
 request = function()
     wrk.method = "GET"

@@ -5,6 +5,22 @@ spring:
   application:
     name: gifts-producer
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: "always"
+  elastic:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 logging:
   level:
     org:
