@@ -1,32 +1,10 @@
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.3.2'
-    id 'io.spring.dependency-management' version '1.1.6'
-}
-
 group = 'org.ipr'
 version = '0.0.1-SNAPSHOT'
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(22)
-    }
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    mavenCentral()
-}
 
 def includeTomcat = project.hasProperty('includeTomcat.child') && project.property('includeTomcat.child').toBoolean()
 
 dependencies {
-    if (includeTomcat) {
+    if (project.hasProperty('includeTomcat.child') && project.property('includeTomcat.child').toBoolean()) {
         implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     }
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
@@ -37,15 +15,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     runtimeOnly 'org.postgresql:r2dbc-postgresql'
     implementation 'io.r2dbc:r2dbc-h2:1.0.0.RELEASE'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
+/*tasks.named('test') {
     useJUnitPlatform()
 
-}
+}*/
 tasks.register("prepareKotlinBuildScriptModel") {}
