@@ -23,11 +23,11 @@ public class GiftsController {
 
     @PostMapping(value = "/gifts/{childId}")
     public Mono<Gift> generateGiftAsync(@PathVariable Long childId) {
-        return giftService.createGift(childId);
+        return giftService.getGiftByChildId(childId);
     }
 
     @PostMapping(value = "/gifts/sync/{childId}")
     public Gift generateGiftSync(@PathVariable Long childId) {
-        return giftService.createGiftSync(childId);
+        return giftService.getGiftByIdBlocking(childId);
     }
 }

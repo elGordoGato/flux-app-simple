@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
-
 @Slf4j
 @RestController
 @RequestMapping("/children")
@@ -27,19 +25,13 @@ public class ChildController {
 
     @GetMapping("/async/{id}")
     public Mono<ChildWithGift> getByIdAsync(@PathVariable long id,
-                                            @RequestParam boolean isBlocking) {
-        Instant now = Instant.now();
-        return childService.getByIdAsync(id, isBlocking)
-                .doAfterTerminate(() -> log.info("GET id: {} duration {}ms",
-                        id, Instant.now().toEpochMilli() - now.toEpochMilli()));
+                                            @RequestParam(defaultValue = "false") boolean isBlocking) {
+        return childService.getByIdAsync(id, isBlocking);
     }
 
     @GetMapping("/sync/{id}")
     public Mono<ChildWithGift> getByIdSync(@PathVariable long id) {
-        Instant now = Instant.now();
-        return childService.getByIdSync(id)
-                .doAfterTerminate(() -> log.info("GET id: {} duration {}ms",
-                        id, Instant.now().toEpochMilli() - now.toEpochMilli()));
+        return childService.getByIdSync(id);
     }
 
 

@@ -22,15 +22,16 @@ public class LoggingFilter implements WebFilter {
         }
         long startTime = Instant.now().toEpochMilli();
         ServerHttpRequest httpRequest = exchange.getRequest();
-        log.info("Incoming request: method={}, path={}, params={}",
+        String requestId = exchange.getLogPrefix();
+        log.info("[{}] - Incoming request: method={}, path={}, params={}",
+                requestId,
                 httpRequest.getMethod(),
                 httpRequest.getURI().getPath(),
                 httpRequest.getQueryParams());
         return chain.filter(exchange).doAfterTerminate(() -> {
             long duration = System.currentTimeMillis() - startTime;
-            log.info("Request completed:\n {}, Duration={}ms",
-                    httpRequest.getURI(),
-                    duration);
+            log.info("[{}] - Request completed: Duration = {}ms",
+                    requestId, duration);
         });
     }
 }

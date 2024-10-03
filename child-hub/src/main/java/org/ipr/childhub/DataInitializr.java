@@ -52,9 +52,9 @@ class DataInitializr implements CommandLineRunner {
     public void run(String[] args) {
         Flux.range(1, 100)
                 .doFirst(() -> log.info("start data initialization  ..."))
-                .doAfterTerminate(() -> log.info("complete data initialization"))
                 .map(i -> getRandomChild())
                 .flatMap(childRepository::save)
+                .doAfterTerminate(() -> log.info("complete data initialization"))
                 .subscribe();
     }
 

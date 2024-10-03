@@ -1,6 +1,7 @@
 package org.ipr.childhub.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.ipr.childhub.client.GiftsClient;
 import org.ipr.childhub.data.entity.Child;
@@ -41,9 +42,10 @@ public class ChildServiceImpl implements ChildService {
                                 giftClient.getByIdAsync(id).block()));
     }
 
+    @SneakyThrows
     private Mono<ChildWithGift> getByIdWithoutBlocking(Long id) {
-        return childRepository.findById(id)
+        return childRepository.findById(id).log()
                 .flatMap(child -> giftClient.getByIdAsync(id)
-                        .map(gift -> (new ChildWithGift(child, gift))));
+                        .map(gift -> new ChildWithGift(child, gift)));
     }
 }

@@ -1,38 +1,31 @@
 package org.ipr.giftsproducer.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.ipr.giftsproducer.data.entity.Gift;
+import org.ipr.giftsproducer.data.repository.GiftRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class GiftServiceImpl implements GiftService {
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
-    private final short delay = 500;
+    private final GiftRepository giftRepository;
+    private static final short DELAY = 500;
 
 
     @Override
-    public Mono<Gift> createGift(Long childId) {
-        Gift gift = GiftGenerator.generate(childId);
-        return Mono.just(gift).delayElement(Duration.ofMillis(delay));
+    public Mono<Gift> getGiftByChildId(Long childId) {
+        return giftRepository.findByChildId(childId).delayElement(Duration.ofMillis(DELAY));
     }
 
+    @SneakyThrows
     @Override
-    public Gift createGiftSync(Long childId) {
-        final Gift[] gift = new Gift[1];
-        try {
-            scheduler.schedule(() -> {
-                gift[0] = GiftGenerator.generate(childId);
-            }, delay, TimeUnit.MILLISECONDS).get();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return gift[0];
+    public Gift getGiftByIdBlocking(Long childId) {
+        return giftRepository.findByChildId(childId).toFuture().get();
     }
 }

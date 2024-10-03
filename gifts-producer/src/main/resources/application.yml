@@ -5,6 +5,12 @@ spring:
   application:
     name: gifts-producer
 
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/gifts
+      repositories:
+        type: auto
+
 management:
   endpoints:
     web:
@@ -28,6 +34,7 @@ logging:
         transaction: WARN
         transaction.interceptor: WARN
     root: info
+data.init.enabled: false
 
 
 

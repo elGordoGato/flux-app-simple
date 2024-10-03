@@ -4,7 +4,7 @@ import org.ipr.giftsproducer.data.entity.Gift;
 import reactor.core.publisher.Mono;
 
 public interface GiftService {
-    Mono<Gift> createGift(Long childId);
+    Mono<Gift> getGiftByChildId(Long childId);
 
-    Gift createGiftSync(Long childId);
+    Gift getGiftByIdBlocking(Long childId);
 }
