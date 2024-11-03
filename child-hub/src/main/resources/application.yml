@@ -5,6 +5,29 @@ spring:
         url: ${DATASOURCE_URL:r2dbc:postgresql://localhost:5432/child}
         username: ${DATASOURCE_USER:admin}
         password: ${DATASOURCE_PASSWORD:admin}
+    security:
+        oauth2:
+            resourceserver:
+                opaquetoken:
+                    client-id: test-client
+                    client-secret: test-client
+                    introspection-uri: http://localhost:7777/oauth2/token-info
+
+
+springdoc:
+    auth-types:
+        auth-header-enabled: true
+        client-credentials-enabled: true
+        authorization-code-enabled: true
+    auth-oauth:
+        token-url: http://localhost:7777/oauth2/token
+        authorization_url: http://localhost:7777/oauth2/authorize
+        refresh-url: http://localhost:7777/oauth2/token
+    swagger-ui:
+        enabled: true
+    api-docs:
+        enabled: true
+        path: /v3/api-docs
 management:
     endpoints:
         web:
@@ -22,6 +45,8 @@ management:
             application: ${spring.application.name}
 logging:
     level:
+        javax.management: ERROR
+        org.springframework.security.web.FilterChainProxy: DEBUG
         org:
             springframework:
                 transaction: WARN
