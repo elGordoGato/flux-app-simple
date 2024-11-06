@@ -14,9 +14,8 @@ import java.time.Duration;
 @Slf4j
 @RequiredArgsConstructor
 public class GiftServiceImpl implements GiftService {
-    private final GiftRepository giftRepository;
     private static final short DELAY = 500;
-
+    private final GiftRepository giftRepository;
 
     @Override
     public Mono<Gift> getGiftByChildId(Long childId) {
@@ -26,6 +25,6 @@ public class GiftServiceImpl implements GiftService {
     @SneakyThrows
     @Override
     public Gift getGiftByIdBlocking(Long childId) {
-        return giftRepository.findByChildId(childId).toFuture().get();
+        return getGiftByChildId(childId).toFuture().get();
     }
 }

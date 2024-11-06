@@ -3,3 +3,6 @@ network.host: 0.0.0.0 # Для корректной работы внутри к
 
 xpack.security.enabled: true # Для поддержки функционала, обеспечивающего безопасность кластера
 xpack.license.self_generated.type: basic
+cluster.routing.allocation.disk.watermark.low: "600mb"
+cluster.routing.allocation.disk.watermark.high: "500mb"
+cluster.routing.allocation.disk.watermark.flood_stage: "400mb"

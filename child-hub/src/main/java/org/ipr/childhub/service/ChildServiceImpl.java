@@ -44,7 +44,7 @@ public class ChildServiceImpl implements ChildService {
 
     @SneakyThrows
     private Mono<ChildWithGift> getByIdWithoutBlocking(Long id) {
-        return childRepository.findById(id).log()
+        return childRepository.findById(id)
                 .flatMap(child -> giftClient.getByIdAsync(id)
                         .map(gift -> new ChildWithGift(child, gift)));
     }
